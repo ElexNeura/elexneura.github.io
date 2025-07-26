@@ -72,10 +72,3 @@ footer {
   font-size: 0.9rem;
 }
 
-.logo {
-  width: 200px; /* o la larghezza che preferisci */
-  height: auto;
-  display: block;
-  margin: 0 auto 15px auto; /* centra e aggiunge margine sotto */
-}
-
