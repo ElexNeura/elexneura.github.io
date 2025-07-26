@@ -177,13 +177,3 @@ footer {
 .navbar a:hover {
   color: #fff;
 } */
-
-<section id="user-auth" class="section-auth">
-  <h2>Accedi o Registrati</h2>
-  <form id="auth-form">
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password" required />
-    <button type="submit">Login / Registrati</button>
-  </form>
-  <p id="auth-message"></p>
-</section>
