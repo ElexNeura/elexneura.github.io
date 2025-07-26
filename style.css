@@ -86,7 +86,7 @@ footer {
 }
 
 .subtitle {
-  font-size: 2rem; /* o la dimensione che preferisci */
+  font-size: 10rem; /* o la dimensione che preferisci */
   font-weight: 600;  /* opzionale, per renderlo più in evidenza */
   margin-top: 15px;  /* per distanziare un po' */
 }
