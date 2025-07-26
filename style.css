@@ -135,6 +135,12 @@ h2 {
   color: #121212;
 }
 
+.home-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 40px;
+}
+
 .btn-secondary.return-home {
   margin-top: 80px;
   display: inline-block;
