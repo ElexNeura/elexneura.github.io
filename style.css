@@ -32,12 +32,14 @@ header {
 
 /* Banner orizzontale */
 .banner {
-  width: 100%; /* meglio 100% per adattarsi allo schermo */
+  width: 80%;        /* larghezza più contenuta */
+  max-width: 700px;  /* massimo 700px, o la misura che preferisci */
   height: auto;
   display: block;
-  border-radius: 8px 8px 0 0; /* arrotonda angoli superiori */
-  margin-bottom: 15px;
+  margin: 0 auto 15px auto; /* centra orizzontalmente e mette margine sotto */
+  border-radius: 8px 8px 0 0; /* angoli arrotondati sopra */
 }
+
 
 /* Testo sotto banner dentro header */
 header .container {
