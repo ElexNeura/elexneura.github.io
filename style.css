@@ -40,7 +40,7 @@ header {
 
 /* Testo sotto banner dentro header */
 header .container {
-  padding: 60px 0 90px 0; /* padding verticale per il testo */
+  padding: 20px 0 30px 0; /* padding verticale per il testo */
 }
 
 /* Logo (se usi ancora logo, altrimenti puoi rimuovere) */
