@@ -30,7 +30,10 @@ header {
 .banner {
   max-width: 100%;
   height: auto;
+  display: block;
+  margin: 0 auto;
 }
+
 
 .subtitle {
   font-size: 2rem;
