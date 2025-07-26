@@ -6,14 +6,33 @@
   <title>ElexNeura</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="ElexNeura.ico" type="image/x-icon" />
+  <style>
+    /* Piccole aggiunte di stile per i pulsanti preferiti e lista preferiti */
+    .btn-favorite {
+      background-color: #ff6666;
+      border: none;
+      color: white;
+      padding: 6px 12px;
+      margin-right: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .btn-favorite:hover {
+      background-color: #ff4c4c;
+    }
+    #favorites-list button {
+      margin-left: 10px;
+      padding: 3px 6px;
+      cursor: pointer;
+    }
+    #auth-message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <!-- <nav>
-    <a href="#chi-siamo">Chi siamo</a>
-    <a href="#progetti">Progetti</a>
-    <a href="#contatti">Contatti</a>
-  </nav> -->
-
+  <!-- Header -->
   <header>
     <div class="container">
       <img src="ElexNeura-banner.png" alt="Banner ElexNeura" class="banner" />
@@ -21,6 +40,18 @@
     </div>
   </header>
 
+  <!-- Sezione autenticazione -->
+  <section id="user-auth" class="section-auth">
+    <h2>Accedi o Registrati</h2>
+    <form id="auth-form">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit">Login / Registrati</button>
+    </form>
+    <p id="auth-message"></p>
+  </section>
+
+  <!-- Main content -->
   <main class="container">
     <section id="about" class="section-about">
       <h2>Chi siamo</h2>
@@ -35,18 +66,25 @@
       <h2>Progetti in evidenza</h2>
       <div class="projects-list">
 
-        <article class="project-item">
+        <article class="project-item" data-project="Sistemi embedded">
           <h3>Sistemi embedded</h3>
           <p>Progetti con microcontrollori per applicazioni IoT e automazione.</p>
+          <button class="btn-favorite">❤️ Aggiungi ai preferiti</button>
           <a href="#" class="btn-secondary">Scopri di più</a>
         </article>
 
-        <article class="project-item">
+        <article class="project-item" data-project="Machine learning">
           <h3>Machine learning</h3>
           <p>Analisi dati avanzata per estrarre informazioni e predire tendenze future.</p>
+          <button class="btn-favorite">❤️ Aggiungi ai preferiti</button>
           <a href="#" class="btn-secondary">Scopri di più</a>
         </article>
       </div>
+    </section>
+
+    <section id="favorites" class="section-favorites" style="display:none;">
+      <h2>Progetti Preferiti</h2>
+      <ul id="favorites-list"></ul>
     </section>
 
     <section id="contact" class="section-contact">
@@ -63,5 +101,125 @@
       <p>© 2025 ElexNeura. Tutti i diritti riservati.</p>
     </div>
   </footer>
+
+  <!-- Script per autenticazione e gestione preferiti -->
+  <script>
+    const serverUrl = 'http://localhost:3000'; // Cambia se il backend è su altro indirizzo/porta
+
+    let currentUserEmail = null;
+
+    const authForm = document.getElementById('auth-form');
+    const authMessage = document.getElementById('auth-message');
+    const favoritesSection = document.getElementById('favorites');
+    const favoritesList = document.getElementById('favorites-list');
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch(serverUrl + '/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          authMessage.textContent = data.error || 'Errore';
+          return;
+        }
+
+        authMessage.textContent = data.message;
+        currentUserEmail = data.email;
+
+        if (data.favorites) {
+          renderFavorites(data.favorites);
+        } else {
+          favoritesList.innerHTML = '';
+        }
+        favoritesSection.style.display = 'block';
+
+      } catch (error) {
+        authMessage.textContent = 'Errore di connessione';
+      }
+    });
+
+    // Funzione per aggiornare la lista preferiti nel DOM
+    function renderFavorites(favorites) {
+      favoritesList.innerHTML = '';
+      favorites.forEach(project => {
+        const li = document.createElement('li');
+        li.textContent = project + ' ';
+        // bottone per rimuovere dai preferiti
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Rimuovi';
+        removeBtn.onclick = () => removeFavorite(project);
+        li.appendChild(removeBtn);
+        favoritesList.appendChild(li);
+      });
+    }
+
+    // Aggiungi evento a tutti i bottoni "aggiungi ai preferiti"
+    document.querySelectorAll('.btn-favorite').forEach(button => {
+      button.addEventListener('click', async () => {
+        if (!currentUserEmail) {
+          alert('Devi prima fare login o registrarti');
+          return;
+        }
+        const project = button.closest('.project-item').dataset.project;
+
+        try {
+          const res = await fetch(serverUrl + '/favorites/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: currentUserEmail, project }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            alert(data.error || 'Errore');
+            return;
+          }
+
+          renderFavorites(data.favorites);
+          favoritesSection.style.display = 'block';
+          alert(`"${project}" aggiunto ai preferiti!`);
+
+        } catch (error) {
+          alert('Errore di connessione');
+        }
+      });
+    });
+
+    // Rimuovi preferito
+    async function removeFavorite(project) {
+      if (!currentUserEmail) return;
+
+      try {
+        const res = await fetch(serverUrl + '/favorites/remove', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: currentUserEmail, project }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.error || 'Errore');
+          return;
+        }
+
+        renderFavorites(data.favorites);
+        if (data.favorites.length === 0) favoritesSection.style.display = 'none';
+
+      } catch (error) {
+        alert('Errore di connessione');
+      }
+    }
+  </script>
 </body>
 </html>
