@@ -1,5 +1,10 @@
-# Pagina web: [elexneura.github.io](https://elexneura.github.io)
+# Web Site: [elexneura.github.io](https://elexneura.github.io)
 
-# Si tratta di un laboratorio digitale in cui si condividono idee su progetti di elettronica ed intelligenza artificiale.
-# Troverete esempi di progetti per sistemi e microcontrollori embedded, progetti di AI pura per analisi dati ed anche progetti che accomunano soluzioni embedded e reti neurali.
-# Grazie per il vostro supporto!
+# This is a digital lab where ideas about electronics and artificial intelligence projects are shared.
+
+# You will find examples of projects for embedded systems and microcontrollers, pure AI projects for data analysis, and also projects that combine embedded solutions and neural networks.
+
+# Thank you for your support!
+
+
+
