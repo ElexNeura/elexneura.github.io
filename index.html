@@ -88,39 +88,6 @@
     </nav>
   </header>
 
-    <!-- Contenitore del widget Google Translate (nascosto) -->
-  <div id="google_translate_element" style="display:none;"></div>
-
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'it',
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
-      }, 'google_translate_element');
-    }
-  </script>
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-  <script>
-    function translatePage(lang) {
-      var frame = document.querySelector('iframe.goog-te-menu-frame');
-      if (!frame) {
-        alert('Attendi qualche secondo, il widget Google Translate si sta caricando.');
-        return;
-      }
-      var innerDoc = frame.contentDocument || frame.contentWindow.document;
-      var langElements = innerDoc.querySelectorAll('.goog-te-menu2-item span.text');
-      for (let i = 0; i < langElements.length; i++) {
-        let text = langElements[i].innerText.toLowerCase();
-        if ((lang === 'it' && text.includes('italiano')) || (lang === 'en' && text.includes('english'))) {
-          langElements[i].click();
-          break;
-        }
-      }
-    }
-  </script>
-
 
   <header class="relative overflow-hidden bg-gradient-to-br from-white to-blue-50">
     <div class="max-w-4xl mx-auto text-center py-24 px-6 flex flex-col items-center" data-aos="fade-down">
@@ -345,5 +312,36 @@
       once: true
     });
   </script>
+
+  <!-- Google Translate integration -->
+<div id="google_translate_element" style="display: none;"></div>
+
+<script type="text/javascript">
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'it',
+      includedLanguages: 'it,en',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+
+  function translatePage(lang) {
+    const gtFrame = document.querySelector('iframe.goog-te-menu-frame');
+    if (!gtFrame) return;
+
+    const innerDoc = gtFrame.contentDocument || gtFrame.contentWindow.document;
+    const links = innerDoc.querySelectorAll('.goog-te-menu2-item span.text');
+
+    for (let i = 0; i < links.length; i++) {
+      if (links[i].innerText.toLowerCase().indexOf(lang) !== -1) {
+        links[i].click();
+        break;
+      }
+    }
+  }
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
